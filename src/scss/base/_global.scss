@@ -1,0 +1,36 @@
+@use "../abstracts/variables" as *;
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: $color-deep-rose;
+  color: $color-white;
+}
+
+.container {
+  width: min(
+    calc(100% - 48px),
+    $container-width
+  );
+
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: $space-xl;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: min(
+      calc(100% - 32px),
+      $container-width
+    );
+  }
+
+  .section {
+    padding-block: 4rem;
+  }
+}

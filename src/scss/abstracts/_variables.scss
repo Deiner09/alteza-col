@@ -1,0 +1,39 @@
+// ========================================
+// ALTEZA — DESIGN TOKENS
+// ========================================
+
+// Brand colors
+$color-black: #181616;
+$color-white: #ffffff;
+
+$color-cream: #fcf8f6;
+$color-nude: #f7ece9;
+$color-blush: #efd7d4;
+$color-rose: #d79b9e;
+$color-deep-rose: #9b5c63;
+
+// Text
+$color-text: #252122;
+$color-text-soft: #746c6d;
+
+// Borders
+$color-border: #eadfdc;
+
+// Typography
+$font-display: "Cormorant Garamond", serif;
+$font-body: "Montserrat", sans-serif;
+
+// Layout
+$container-width: 1440px;
+
+// Spacing
+$space-xs: 0.5rem;
+$space-sm: 1rem;
+$space-md: 2rem;
+$space-lg: 4rem;
+$space-xl: 7rem;
+
+// Transitions
+$transition-fast: 180ms ease;
+$transition-normal: 300ms ease;
+$transition-slow: 500ms ease;
