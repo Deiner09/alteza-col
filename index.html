@@ -24,6 +24,92 @@
     Alteza — Beauty & Care
   </title>
 
+
+  <style>
+    /* ========================================
+       ALTEZA — HEADER + HERO UNIFIED
+       ======================================== */
+
+    :root {
+      --alteza-topbar-height: 40px;
+      --alteza-header-height: 102px;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .site-header--overlay {
+      position: absolute;
+      top: var(--alteza-topbar-height);
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: transparent !important;
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .site-header--overlay .site-header__inner {
+      min-height: var(--alteza-header-height);
+    }
+
+    .site-header--overlay .site-logo,
+    .site-header--overlay .main-nav a,
+    .site-header--overlay .header-actions button {
+      color: #211b1b !important;
+    }
+
+    .site-header--overlay .main-nav a {
+      background: transparent !important;
+    }
+
+    .site-header--overlay .header-actions button {
+      background: transparent !important;
+      border: 0 !important;
+    }
+
+    .site-header--overlay .header-actions small {
+      background: #a7656d !important;
+      color: #ffffff !important;
+    }
+
+    main {
+      position: relative;
+    }
+
+    #root {
+      position: relative;
+      z-index: 1;
+    }
+
+    .alteza-image-stream__content {
+      padding-top: 150px !important;
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --alteza-topbar-height: 40px;
+        --alteza-header-height: 88px;
+      }
+
+      .alteza-image-stream__content {
+        padding-top: 128px !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --alteza-topbar-height: 40px;
+        --alteza-header-height: 78px;
+      }
+
+      .alteza-image-stream__content {
+        padding-top: 112px !important;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -49,97 +135,6 @@
     </div>
 
   </div>
-
-
-  <!-- ========================================
-       HEADER
-  ========================================= -->
-
-  <header class="site-header">
-
-    <div class="container site-header__inner">
-
-      <a
-        href="/"
-        class="site-logo"
-        aria-label="Alteza — inicio"
-      >
-        ALTEZA
-      </a>
-
-
-      <nav
-        class="main-nav"
-        aria-label="Navegación principal"
-      >
-
-        <a href="/">
-          Inicio
-        </a>
-
-        <a href="#shop">
-          Tienda
-        </a>
-
-        <a href="#shop">
-          Maquillaje
-        </a>
-
-        <a href="#collections">
-          Skincare
-        </a>
-
-        <a href="#collections">
-          Cabello
-        </a>
-
-        <a href="#collections">
-          Accesorios
-        </a>
-
-      </nav>
-
-
-      <div class="header-actions">
-
-        <button
-          type="button"
-          aria-label="Buscar"
-        >
-          <span>⌕</span>
-        </button>
-
-
-        <button
-          type="button"
-          aria-label="Mi cuenta"
-        >
-          <span>♙</span>
-        </button>
-
-
-        <button
-          type="button"
-          aria-label="Favoritos"
-        >
-          <span>♡</span>
-        </button>
-
-
-        <button
-          type="button"
-          aria-label="Carrito"
-        >
-          <span>🛍</span>
-          <small>0</small>
-        </button>
-
-      </div>
-
-    </div>
-
-  </header>
-
 
   <!-- ========================================
        MAIN
