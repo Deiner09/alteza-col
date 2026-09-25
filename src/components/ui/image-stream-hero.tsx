@@ -1,16 +1,13 @@
 import React, { useMemo, useState } from "react";
 
+import {
+  products as searchProducts,
+  type Product,
+} from "../../data/products";
+
 type StreamImage = {
   src: string;
   alt: string;
-};
-
-type SearchProduct = {
-  name: string;
-  category: string;
-  price: string;
-  image: string;
-  keywords: string;
 };
 
 type ImageStreamHeroProps = {
@@ -22,71 +19,18 @@ type ImageStreamHeroProps = {
   className?: string;
 };
 
-const SEARCH_PRODUCTS: SearchProduct[] = [
-  {
-    name: "Crema Hidratante Facial",
-    category: "Skincare",
-    price: "$89.000",
-    image: "/images/products/skincare/crema-hidratante.webp",
-    keywords: "crema hidratante piel cara skincare",
-  },
+function normalizeSearchText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase();
+}
 
-  {
-    name: "Sérum Facial Rejuvenecedor",
-    category: "Skincare",
-    price: "$88.000",
-    image: "/images/products/skincare/serum-rejuvenecedor.webp",
-    keywords: "serum sérum rejuvenecedor piel skincare",
-  },
-
-  {
-    name: "Lipstick Rose Nude",
-    category: "Maquillaje",
-    price: "$69.000",
-    image: "/images/products/makeup/lipstick-rose-nude.webp",
-    keywords: "labial lipstick nude labios maquillaje",
-  },
-
-  {
-    name: "Blush Rose Glow",
-    category: "Maquillaje",
-    price: "$79.000",
-    image: "/images/products/makeup/blush-rose-glow.webp",
-    keywords: "blush rubor rosa mejillas maquillaje",
-  },
-
-  {
-    name: "Glow Facial Oil",
-    category: "Skincare",
-    price: "$95.000",
-    image: "",
-    keywords: "aceite facial glow brillo piel skincare",
-  },
-
-  {
-    name: "Hair Repair Mask",
-    category: "Cuidado capilar",
-    price: "$84.000",
-    image: "",
-    keywords: "mascarilla cabello pelo hair reparación",
-  },
-
-  {
-    name: "Rose Hydrating Mist",
-    category: "Skincare",
-    price: "$72.000",
-    image: "",
-    keywords: "mist bruma hidratante rosa piel skincare",
-  },
-
-  {
-    name: "Nude Rose Palette",
-    category: "Maquillaje",
-    price: "$119.000",
-    image: "",
-    keywords: "paleta sombras nude rosa maquillaje",
-  },
-];
+function createProductSlug(name: string) {
+  return normalizeSearchText(name)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 const DEFAULT_IMAGES: StreamImage[] = [
   {
@@ -98,13 +42,6 @@ const DEFAULT_IMAGES: StreamImage[] = [
     alt: "Campaña de belleza Alteza",
   },
 ];
-
-function normalizeSearchText(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase();
-}
 
 export function ImageStreamHero({
   images = DEFAULT_IMAGES,
@@ -118,32 +55,42 @@ export function ImageStreamHero({
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchResults = useMemo(() => {
-    const term = normalizeSearchText(searchTerm.trim());
+    const term = normalizeSearchText(
+      searchTerm.trim()
+    );
 
     if (!term) {
-      return SEARCH_PRODUCTS.slice(0, 5);
+      return searchProducts.slice(0, 5);
     }
 
-    return SEARCH_PRODUCTS.filter((product) => {
-      const searchableText = normalizeSearchText(
-        `${product.name} ${product.category} ${product.keywords}`
-      );
+    return searchProducts
+      .filter((product) => {
+        const searchableText =
+          normalizeSearchText(
+            `${product.name} ${product.category} ${product.keywords}`
+          );
 
-      return searchableText.includes(term);
-    }).slice(0, 5);
+        return searchableText.includes(term);
+      })
+      .slice(0, 5);
   }, [searchTerm]);
 
-  const streamImages = images.length ? images : DEFAULT_IMAGES;
+  const streamImages = images.length
+    ? images
+    : DEFAULT_IMAGES;
 
   const leftCards = Array.from(
     { length: cards },
-    (_, index) => streamImages[index % streamImages.length]
+    (_, index) =>
+      streamImages[index % streamImages.length]
   );
 
   const rightCards = Array.from(
     { length: cards },
     (_, index) =>
-      streamImages[(index + 2) % streamImages.length]
+      streamImages[
+        (index + 2) % streamImages.length
+      ]
   );
 
   const closeSearch = () => {
@@ -214,23 +161,81 @@ export function ImageStreamHero({
             );
         }
 
-        .alteza-hero-nav__logo {
+        .alteza-hero-nav__badge {
           justify-self: start;
 
-          color: #21191a;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          width: 94px;
+          min-height: 58px;
+
+          padding: 8px 10px;
+
+          border: 1px solid rgba(167, 101, 109, 0.32);
+          border-radius: 4px;
+
+          background: rgba(255, 250, 248, 0.34);
+
+          color: #9f7074;
 
           text-decoration: none;
 
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+          transition:
+            border-color 180ms ease,
+            color 180ms ease,
+            background 180ms ease,
+            transform 180ms ease;
+        }
+
+        .alteza-hero-nav__badge:hover {
+          border-color: rgba(159, 112, 116, 0.55);
+
+          background: rgba(255, 250, 248, 0.58);
+
+          color: #8d5c62;
+
+          transform: translateY(-1px);
+        }
+
+        .alteza-hero-nav__badge-name {
+          display: block;
+
           font-family:
+            "Cormorant Garamond",
             Georgia,
             "Times New Roman",
             serif;
 
-          font-size: clamp(40px, 3.2vw, 58px);
-          font-weight: 400;
+          font-size: 25px;
+          font-weight: 500;
 
-          letter-spacing: 0.01em;
-          line-height: 1;
+          letter-spacing: 0.04em;
+          line-height: 0.9;
+        }
+
+        .alteza-hero-nav__badge-subtitle {
+          display: block;
+
+          margin-top: 6px;
+
+          font-family:
+            "Montserrat",
+            Arial,
+            Helvetica,
+            sans-serif;
+
+          font-size: 5px;
+          font-weight: 600;
+
+          letter-spacing: 0.22em;
+
+          text-transform: uppercase;
         }
 
         .alteza-hero-nav__links {
@@ -546,6 +551,15 @@ export function ImageStreamHero({
 
         .alteza-image-stream__content h1 {
           color: #1c1717 !important;
+
+          font-family:
+            "Cormorant Garamond",
+            Georgia,
+            "Times New Roman",
+            serif !important;
+
+          font-weight: 500 !important;
+
           text-shadow: none !important;
         }
 
@@ -1286,18 +1300,28 @@ export function ImageStreamHero({
         @media (max-width: 640px) {
 
           .alteza-image-stream {
-            height: 700px;
-            min-height: 590px;
+            height: 560px;
+            min-height: 560px;
           }
 
           .alteza-hero-nav {
             height: 82px;
-
             padding: 0 16px;
           }
 
-          .alteza-hero-nav__logo {
-            font-size: 32px;
+          .alteza-hero-nav__badge {
+            width: 78px;
+            min-height: 50px;
+            padding: 6px 8px;
+          }
+
+          .alteza-hero-nav__badge-name {
+            font-size: 21px;
+          }
+
+          .alteza-hero-nav__badge-subtitle {
+            margin-top: 5px;
+            font-size: 4.5px;
           }
 
           .alteza-hero-nav__links {
@@ -1314,19 +1338,45 @@ export function ImageStreamHero({
 
           .alteza-image-stream__card {
             width: 125px;
+            top: 63%;
           }
 
           .alteza-image-stream__content {
             padding-top: 112px;
+            padding-inline: 14px;
+          }
+
+          .alteza-image-stream__content > div {
+            width: min(100%, 365px);
+            margin-inline: auto;
+          }
+
+          .alteza-image-stream__content h1 {
+            max-width: 100%;
+            font-size: clamp(44px, 13vw, 58px) !important;
+            letter-spacing: 0.08em !important;
+          }
+
+          .alteza-image-stream__content p {
+            max-width: 100%;
+            overflow-wrap: break-word;
+          }
+
+          .alteza-image-stream__content p:first-child {
+            font-size: 8px !important;
+            letter-spacing: 0.28em !important;
+          }
+
+          .alteza-image-stream__content p:nth-of-type(2) {
+            margin-inline: auto;
+            font-size: 12px !important;
+            line-height: 1.7;
           }
 
           .alteza-image-stream__content p:last-child {
-            max-width:
-              calc(100vw - 40px);
-
             margin-top: 116px;
-
             padding: 9px 18px;
+            max-width: calc(100vw - 40px);
           }
 
           .alteza-image-stream__content > div::after {
@@ -1428,26 +1478,29 @@ export function ImageStreamHero({
       <section
         className={`alteza-image-stream ${className}`}
       >
-
         {/* =========================================
             NAVEGACIÓN
         ========================================= */}
 
         <header className="alteza-hero-nav">
-
           <a
-            className="alteza-hero-nav__logo"
+            className="alteza-hero-nav__badge"
             href="/"
             aria-label="Alteza — inicio"
           >
-            ALTEZA
+            <span className="alteza-hero-nav__badge-name">
+              ALTEZA
+            </span>
+
+            <span className="alteza-hero-nav__badge-subtitle">
+              BEAUTY HOUSE
+            </span>
           </a>
 
           <nav
             className="alteza-hero-nav__links"
             aria-label="Navegación principal"
           >
-
             <a
               className="alteza-hero-nav__link"
               href="/"
@@ -1457,43 +1510,41 @@ export function ImageStreamHero({
 
             <a
               className="alteza-hero-nav__link"
-              href="#shop"
+              href="/tienda"
             >
               Tienda
             </a>
 
             <a
               className="alteza-hero-nav__link"
-              href="#shop"
+              href="/tienda?categoria=Maquillaje"
             >
               Maquillaje
             </a>
 
             <a
               className="alteza-hero-nav__link"
-              href="#collections"
+              href="/tienda?categoria=Skincare"
             >
               Skincare
             </a>
 
             <a
               className="alteza-hero-nav__link"
-              href="#collections"
+              href="/tienda?categoria=Cuidado%20capilar"
             >
               Cabello
             </a>
 
             <a
               className="alteza-hero-nav__link"
-              href="#collections"
+              href="/tienda?categoria=Accesorios"
             >
               Accesorios
             </a>
-
           </nav>
 
           <div className="alteza-hero-nav__actions">
-
             {/* BUSCAR */}
 
             <button
@@ -1614,9 +1665,7 @@ export function ImageStreamHero({
                 0
               </span>
             </button>
-
           </div>
-
         </header>
 
         {/* =========================================
@@ -1634,11 +1683,9 @@ export function ImageStreamHero({
         <div
           className="alteza-image-stream__rails"
         >
-
           <div
             className="alteza-image-stream__rail"
           >
-
             {leftCards.map(
               (image, index) => (
                 <figure
@@ -1667,13 +1714,11 @@ export function ImageStreamHero({
                 </figure>
               )
             )}
-
           </div>
 
           <div
             className="alteza-image-stream__rail"
           >
-
             {rightCards.map(
               (image, index) => (
                 <figure
@@ -1705,9 +1750,7 @@ export function ImageStreamHero({
                 </figure>
               )
             )}
-
           </div>
-
         </div>
 
         <div
@@ -1738,18 +1781,15 @@ export function ImageStreamHero({
             aria-label="Buscar productos"
             onClick={closeSearch}
           >
-
             <div
               className="alteza-search__panel"
               onClick={(event) =>
                 event.stopPropagation()
               }
             >
-
               <div
                 className="alteza-search__top"
               >
-
                 <span
                   className="
                     alteza-search__eyebrow
@@ -1768,7 +1808,6 @@ export function ImageStreamHero({
                 >
                   ×
                 </button>
-
               </div>
 
               <input
@@ -1776,9 +1815,7 @@ export function ImageStreamHero({
                   alteza-search__input
                 "
                 type="search"
-                placeholder="
-                  ¿Qué estás buscando?
-                "
+                placeholder="¿Qué estás buscando?"
                 value={searchTerm}
                 onChange={(event) =>
                   setSearchTerm(
@@ -1793,7 +1830,6 @@ export function ImageStreamHero({
                   alteza-search__results
                 "
               >
-
                 <p
                   className="
                     alteza-search__results-title
@@ -1806,16 +1842,13 @@ export function ImageStreamHero({
 
                 {searchResults.length > 0 ? (
                   searchResults.map(
-                    (product) => (
+                    (product: Product) => (
                       <a
                         key={product.name}
-                        className="
-                          alteza-search__result
-                        "
-                        href="#shop"
+                        className="alteza-search__result"
+                        href={`/producto/${createProductSlug(product.name)}`}
                         onClick={closeSearch}
                       >
-
                         <span
                           className="
                             alteza-search__result-media
@@ -1845,7 +1878,6 @@ export function ImageStreamHero({
                             alteza-search__result-info
                           "
                         >
-
                           <span
                             className="
                               alteza-search__result-name
@@ -1869,7 +1901,6 @@ export function ImageStreamHero({
                           >
                             {product.price}
                           </span>
-
                         </span>
 
                         <span
@@ -1880,7 +1911,6 @@ export function ImageStreamHero({
                         >
                           →
                         </span>
-
                       </a>
                     )
                   )
@@ -1894,11 +1924,8 @@ export function ImageStreamHero({
                     relacionados con tu búsqueda.
                   </p>
                 )}
-
               </div>
-
             </div>
-
           </div>
         )}
 
@@ -1909,13 +1936,11 @@ export function ImageStreamHero({
         <div
           className="alteza-hero-bottom"
         >
-
           <div
             className="
               alteza-hero-bottom__content
             "
           >
-
             <span
               className="
                 alteza-hero-bottom__label
@@ -1934,15 +1959,12 @@ export function ImageStreamHero({
               className="
                 alteza-hero-bottom__link
               "
-              href="#shop"
+              href="/tienda"
             >
               Explorar colección →
             </a>
-
           </div>
-
         </div>
-
       </section>
     </>
   );

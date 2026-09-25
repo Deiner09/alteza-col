@@ -1,7 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import ImageStreamHero from "@/components/ui/image-stream-hero";
+import ImageStreamHero from "./components/ui/image-stream-hero";
+import { GlowButton } from "./components/ui/shiny-button-1";
+import TrendingProducts from "./components/TrendingProducts";
+import Categories from "./components/Categories";
+import ShopPage from "./pages/ShopPage";
+import ProductPage from "./pages/ProductPage";
 
 import "./scss/main.scss";
 import "./style.css";
@@ -53,40 +58,67 @@ const altezaImages = [
   },
 ];
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+function HomePage() {
+  return (
+    <>
+      <ImageStreamHero
+        images={altezaImages}
+        cards={11}
+        speed={28}
+        axis={56}
+      >
+        <div className="text-center">
+          <p className="mb-4 text-[11px] uppercase tracking-[0.5em] text-stone-600">
+            BEAUTY · CARE · COLLECTION
+          </p>
+
+          <h1 className="font-serif text-7xl font-medium tracking-[0.16em] text-stone-900 md:text-8xl">
+            ALTEZA
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-xl text-sm tracking-[0.08em] text-stone-600 md:text-base">
+            Belleza que se siente. Elegancia que permanece.
+          </p>
+
+          <GlowButton
+  href="#collections"
+  className="mt-7"
+>
+  Explorar colección →
+</GlowButton>
+        </div>
+      </ImageStreamHero>
+
+      <Categories />
+
+<TrendingProducts />
+    </>
+  );
+}
+function App() {
+  const pathname = window.location.pathname;
+
+  const productPrefix = "/producto/";
+
+  if (pathname.startsWith(productPrefix)) {
+    const slug = decodeURIComponent(
+      pathname.slice(productPrefix.length)
+    );
+
+    return <ProductPage slug={slug} />;
+  }
+
+  if (pathname === "/tienda") {
+    return <ShopPage />;
+  }
+
+  return <HomePage />;
+}
+
+ReactDOM.createRoot(
+  document.getElementById("root")!
+).render(
   <React.StrictMode>
-    <ImageStreamHero
-      images={altezaImages}
-      cards={11}
-      speed={28}
-      axis={56}
-    >
-      <div className="text-center">
-  <p className="mb-4 text-[11px] uppercase tracking-[0.5em] text-stone-600">
-    BEAUTY · CARE · COLLECTION
-  </p>
-
-  <h1 className="font-serif text-7xl font-medium tracking-[0.16em] text-stone-900 md:text-8xl">
-    ALTEZA
-  </h1>
-
-  <p className="mx-auto mt-5 max-w-xl text-sm tracking-[0.08em] text-stone-600 md:text-base">
-    Belleza que se siente. Elegancia que permanece.
-  </p>
-
-  <a
-    href="#shop"
-    className="btn btn--primary"
-    style={{
-      display: "inline-flex",
-      marginTop: "28px",
-      minWidth: "170px",
-      justifyContent: "center",
-    }}
-  >
-    Comprar ahora →
-  </a>
-</div>
-    </ImageStreamHero>
+    <App />
   </React.StrictMode>
 );
